@@ -1,0 +1,13 @@
+torch
+numpy
+pandas
+scikit-learn
+matplotlib
+tqdm
+tensorboard
+transformers
+nltk
+rouge-score
+bert-score
+opencv-python
+Pillow

@@ -2,6 +2,56 @@
 
 This repository implements a full pipeline for procedural video question answering, from raw videos to temporal modeling, cross-modal fusion, and T5-based answer generation, along with visualization and evaluation utilities.
 
+### Getting Started
+
+#### 1. Clone the repository
+
+```bash
+git clone https://github.com/krantiprakash/Task-verification-in-Procedural-videos.git
+cd MTP1
+```
+
+#### 2. Create and activate a virtual environment (recommended)
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate (for windows)
+source venv/bin/activate (for linux)
+```
+
+#### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 4. Run the pipeline components
+
+Prepare splits (from raw `StepsQA.json`):
+```bash
+python dataset_split.py
+```
+
+Extract CLIP features:
+```bash
+python clip_feature.py
+```
+
+Train TimeSformer and export temporal features:
+```bash
+python timesformer_modeling.py
+```
+
+Train cross-modal fusion:
+```bash
+python cross_model_fusion.py
+```
+
+Train + evaluate T5 QA model:
+```bash
+python t5_answer_generation.py
+```
+
 ### Pipeline Stages
 - **Dataset splitting (`dataset_split.py`)**: Creates stratified train/validation/test JSON splits from `StepsQA.json` and verifies video coverage.
 - **CLIP feature extraction (`clip_feature.py`)**: Samples video frames adaptively around annotated steps, extracts CLIP image embeddings, and optionally visualizes sampling statistics.
@@ -16,3 +66,24 @@ This repository implements a full pipeline for procedural video question answeri
 *High-level flow from raw videos to answer generation.*
 
 ![Pipeline Architecture](./procedural_video_qa_architecture_with_training.png)
+
+### Component Architectures
+
+#### CLIP Feature Extraction (`clip_feature.py`)
+- Uses the CLIP image encoder to turn adaptively sampled video frames into frame-level embeddings, conditioned on annotated procedural steps.
+- Stores per-video feature tensors plus timestamps and can generate diagnostic visualizations (sampled-frame grids, t-SNE plots, and frame-count histograms).
+
+#### TimeSformer Temporal Modeling (`timesformer_modeling.py`)
+- Feeds CLIP frame embeddings into a TimeSformer with relative positional encodings and hierarchical attention pooling to learn compact temporal video embeddings.
+- Trains via a self-supervised next-frame reconstruction objective and then exports temporal feature `.pt` files for train/validation/test splits.
+
+#### Cross-Modal Fusion (`cross_model_fusion.py`)
+- Encodes step descriptions with a Transformer-based text encoder and aligns them with TimeSformer temporal features using an InfoNCE contrastive objective.
+- Produces a sequence of prompt tokens per video that summarize the aligned video–text representation and can be visualized via attention heatmaps and timelines.
+
+#### T5 Answer Generation (`t5_answer_generation.py`)
+- Freezes the cross-modal fusion and text encoder, projects their prompt tokens into the T5 embedding space, and concatenates them with question embeddings.
+- Fine-tunes T5 to generate open-ended answers for procedural video QA, and evaluates with BLEU, ROUGE, METEOR, exact match, F1, and optional BERTScore.
+
+### Performance
+{Performance:} BERTScore F1: 78.34\%, BLEU: 37.13\%, ROUGE-L: 59.09\%, METEOR: 59.10\%, EM: 18.33\%}
