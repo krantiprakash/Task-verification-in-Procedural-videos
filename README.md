@@ -13,7 +13,6 @@ This repository implements a full pipeline for procedural video question answeri
 - **Shared utilities (`utils.py`)**: Common helpers for logging, seeding, data loading, metrics, visualization, experiment management, and early stopping.
 
 ### Pipeline Architecture
+*High-level flow from raw videos to answer generation.*
 
 ![Pipeline Architecture](./procedural_video_qa_architecture_with_training.png)
-
-*High-level flow from raw videos to answer generation.*
