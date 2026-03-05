@@ -86,7 +86,7 @@ python t5_answer_generation.py
 
 #### T5 Answer Generation (`t5_answer_generation.py`)
 - Freezes the cross-modal fusion and text encoder, projects their prompt tokens into the T5 embedding space, and concatenates them with question embeddings.
-- Fine-tunes T5 to generate open-ended answers for procedural video QA, and evaluates with BLEU, ROUGE, METEOR, exact match, F1, and optional BERTScore.
+- Fine-tunes T5 to generate open-ended answers for procedural video QA, and evaluates with BLEU, ROUGE, METEOR, exact match, F1, and BERTScore.
 ![T5 Answer Generation Architecture](./simplified_t5_architecture.png)
 
 ### Performance
