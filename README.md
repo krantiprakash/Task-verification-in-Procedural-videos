@@ -11,3 +11,9 @@ This repository implements a full pipeline for procedural video question answeri
 - **Cross-modal fusion (`cross_model_fusion.py`)**: Trains a contrastive video–text fusion model that produces prompt tokens for T5, with attention visualizations and early stopping.
 - **Answer generation with T5 (`t5_answer_generation.py`)**: Uses frozen cross-modal prompts plus T5 to generate natural-language answers for video QA, with rich evaluation metrics and logging.
 - **Shared utilities (`utils.py`)**: Common helpers for logging, seeding, data loading, metrics, visualization, experiment management, and early stopping.
+
+### Pipeline Architecture
+
+![Pipeline Architecture](./procedural_video_qa_architecture_with_training.png)
+
+*High-level flow from raw videos to answer generation.*
